@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simple note-taking application">
+    <title>Simple Notes - ModernBlog</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/shared/theme.css">
+    <link rel="stylesheet" href="css/shared/global.css">
+    <link rel="stylesheet" href="css/shared/animations.css">
+    <link rel="stylesheet" href="css/shared/navbar.css">
+    <link rel="stylesheet" href="css/notes.css">
+    <link rel="stylesheet" href="css/shared/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" />
+    
+    <!-- Scripts -->
+    <script src="js/shared/notifications.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">
+                <i class="fas fa-feather-alt"></i>
+                ModernBlog
+            </a>
+            
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="navbar-nav">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="notes.html" class="nav-link active">Notes</a></li>
+                <li><a href="drafts.html" class="nav-link">Drafts</a></li>
+                <li><a href="posts.html" class="nav-link">Posts</a></li>
+                <li><a href="editor.html" class="nav-link">New Post</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div class="user-menu">
+                    <button class="user-button">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="user-name">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    
+                    <div class="user-menu-dropdown">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="navbarManager.logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle fixed" aria-label="Toggle theme" id="themeToggle">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Notes Header -->
+        <div class="notes-header" style="justify-content: center;">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search notes..." aria-label="Search notes">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+        </div>
+
+        <!-- Notes Container -->
+        <div class="notes-container">
+            <div id="notesGrid" class="notes-grid">
+                <!-- Notes will be dynamically added here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state">
+                <i class="fas fa-book-open"></i>
+                <h2>No Notes Yet</h2>
+                <p>Start capturing your thoughts by creating your first note</p>
+            
+            </div>
+        </div>
+
+        <!-- Add Note Button -->
+        <button id="addNoteBtn" class="add-note-btn" aria-label="Add new note">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <!-- Note Editor Modal -->
+        <div id="noteEditorModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <input type="text" class="note-title-input" placeholder="Note Title">
+                    <button class="close-modal" aria-label="Close editor">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="editor-container">
+                    <textarea class="note-editor" placeholder="Write your note here..."></textarea>
+                </div>
+                
+                <div class="modal-footer">
+                    <button class="save-note">Save Note</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toastContainer" class="toast-container"></div>
+    </main>
+
+     <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About ModernBlog</h3>
+                <p>A modern blogging platform designed for writers who appreciate clean design and seamless functionality. Share your thoughts with the world.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+                    <li><a href="posts.html"><i class="fas fa-book"></i>Posts</a></li>
+                    <li><a href="drafts.html"><i class="fas fa-edit"></i>Drafts</a></li>
+                    <li><a href="editor.html"><i class="fas fa-pen"></i>New Post</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-book"></i>Documentation</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i>Help Center</a></li>
+                    
+                    <li><a href="#"><i class="fas fa-shield-alt"></i>Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="https://shorturl.at/o1gQO"><i class="fas fa-envelope"></i>vishavdeepsingh42@gmail.com</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i>Lucknow,UP</a></li>
+                    <li><a href="tel:+918837852479"><i class="fas fa-phone"></i>+918837852479</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 ModernBlog. All rights reserved. Made with <i class="fas fa-heart" style="color: var(--accent-primary);"></i> by <a href="https://www.instagram.com/vishavdeep___singh/profilecard/?igsh=MWx4ZDBybHN5d25reA==">Vishavdeep Singh</a></p>        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/theme.js"></script>
+    <script src="js/navbar.js" defer></script>
+    <script src="js/notes.js" defer></script>
+</body>
+</html>

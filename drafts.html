@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your draft posts with ModernBlog's intuitive draft management system">
+    <title>Drafts - ModernBlog</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/shared/theme.css">
+    <link rel="stylesheet" href="css/shared/global.css">
+    <link rel="stylesheet" href="css/shared/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/shared/navbar.css">
+    <link rel="stylesheet" href="css/shared/footer.css">
+    
+    <style>
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            padding: 1rem;
+            z-index: 100;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .header-title h1 {
+            margin: 0;
+        }
+        
+        .draft-count {
+            background: var(--bg-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        /* Search and Filter */
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 1rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px var(--accent-secondary);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        
+        .search-input:focus + .search-icon {
+            color: var(--accent-primary);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-top: 3rem;
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Drafts Grid */
+        .drafts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .draft-card {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .draft-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y),
+                var(--hover),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .draft-card:hover::before {
+            opacity: 1;
+        }
+        
+        .draft-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 12px var(--shadow);
+        }
+        
+        .draft-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .draft-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .draft-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .draft-card:hover .draft-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .draft-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .draft-action-btn:hover {
+            color: var(--accent-primary);
+            background: var(--bg-tertiary);
+        }
+        
+        .draft-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .draft-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .draft-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Progress Bar */
+        .progress-wrapper {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-badge.draft {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+        
+        .status-badge.autosaved {
+            background: #10b981;
+            color: white;
+        }
+        
+        .status-badge.unsaved {
+            background: #ef4444;
+            color: white;
+        }
+        
+        /* Add Draft Button */
+        .add-draft-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .add-draft-btn:hover {
+            transform: scale(1.1) rotate(180deg);
+            background: var(--accent-secondary);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 1rem;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .main-content {
+                margin-top: 8rem;
+            }
+            
+            .drafts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .draft-actions {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        
+        /* Create Button Styles */
+        .create-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            z-index: 100;
+            overflow: hidden;
+        }
+        
+        .create-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            background: var(--accent-secondary);
+        }
+        
+        .create-button:active {
+            transform: translateY(0);
+        }
+        
+        .create-button-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .create-button i {
+            font-size: 1.1rem;
+        }
+        
+        .create-label {
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .create-button {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                padding: 0.75rem;
+                border-radius: 50%;
+            }
+            
+            .create-label {
+                display: none;
+            }
+            
+            .create-button-content {
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">
+                <i class="fas fa-feather-alt"></i>
+                ModernBlog
+            </a>
+            
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="navbar-nav">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="notes.html" class="nav-link">Notes</a></li>
+                <li><a href="drafts.html" class="nav-link active">Drafts</a></li>
+                <li><a href="posts.html" class="nav-link">Posts</a></li>
+                <li><a href="editor.html" class="nav-link">New Post</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div class="user-menu">
+                    <button class="user-button">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="user-name">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    
+                    <div class="user-menu-dropdown">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="navbarManager.logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle fixed" aria-label="Toggle theme" id="themeToggle">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title animate-fade-in">
+                <h1>Drafts</h1>
+                <span class="draft-count" id="draftCount">0 drafts</span>
+            </div>
+            
+            <div class="header-actions">
+                <div class="search-bar animate-slide-in-down">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="Search drafts..." 
+                        id="searchInput"
+                    >
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <button class="btn btn-secondary btn-ripple animate-fade-in">
+                    <i class="fas fa-filter"></i>
+                    <span>Filter</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="drafts-grid" id="draftsGrid">
+            <!-- Drafts will be dynamically added here -->
+        </div>
+        
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <i class="fas fa-file-alt"></i>
+            <h2>No Drafts Yet</h2>
+            <p>Start writing your first draft and save your ideas for later</p>
+
+        </div>
+    </main>
+
+    <!-- Fixed Create Button -->
+    <a href="editor.html" class="create-button fixed">
+        <i class="fas fa-plus"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About ModernBlog</h3>
+                <p>A modern blogging platform designed for writers who appreciate clean design and seamless functionality. Share your thoughts with the world.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+                    <li><a href="posts.html"><i class="fas fa-book"></i>Posts</a></li>
+                    <li><a href="drafts.html"><i class="fas fa-edit"></i>Drafts</a></li>
+                    <li><a href="editor.html"><i class="fas fa-pen"></i>New Post</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-book"></i>Documentation</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i>Help Center</a></li>
+                    
+                    <li><a href="#"><i class="fas fa-shield-alt"></i>Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="https://shorturl.at/o1gQO"><i class="fas fa-envelope"></i>vishavdeepsingh42@gmail.com</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i>Lucknow,UP</a></li>
+                    <li><a href="tel:+918837852479"><i class="fas fa-phone"></i>+918837852479</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 ModernBlog. All rights reserved. Made with <i class="fas fa-heart" style="color: var(--accent-primary);"></i> by <a href="https://www.instagram.com/vishavdeep___singh/profilecard/?igsh=MWx4ZDBybHN5d25reA==">Vishavdeep Singh</a></p>        </div>
+    </footer>
+
+    <script src="js/theme.js"></script>
+    <script src="js/drafts.js"></script>
+    <script src="js/navbar.js" defer></script>
+</body>
+</html>
