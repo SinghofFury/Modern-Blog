@@ -12,6 +12,10 @@ A modern, responsive blogging platform designed for writers who appreciate clean
 - Lists (ordered and unordered)
 - Real-time word count and reading time estimation
 - Auto-save functionality
+  
+![image](https://github.com/user-attachments/assets/c7e82caf-a163-4d48-bc8f-848a0c66a081)
+
+
 
 ### 📋 Draft Management
 - Create and edit drafts
@@ -19,6 +23,8 @@ A modern, responsive blogging platform designed for writers who appreciate clean
 - Delete drafts with confirmation
 - Search through drafts
 - Preview drafts before publishing
+![image](https://github.com/user-attachments/assets/8364a69f-b7d1-47a5-9fd8-0a0daa14c7f8)
+
 
 ### 📒 Notes System
 - Quick note creation and editing
@@ -26,6 +32,8 @@ A modern, responsive blogging platform designed for writers who appreciate clean
 - Delete notes with animation
 - Responsive grid layout
 - Auto-save feature
+![image](https://github.com/user-attachments/assets/384e8920-28dd-4bb1-b969-c637429970c3)
+
 
 ### 🎨 Modern UI/UX
 - Clean, minimalist design
@@ -34,12 +42,16 @@ A modern, responsive blogging platform designed for writers who appreciate clean
 - Smooth animations and transitions
 - Toast notifications system
 - Mobile-friendly interface
+![image](https://github.com/user-attachments/assets/25a23336-f481-49f1-8287-655a87b65f45)
+
 
 ### 💾 Data Management
 - Local storage for posts, drafts, and notes
 - Automatic data persistence
 - Search functionality across all content
 - Efficient state management
+![image](https://github.com/user-attachments/assets/5292668d-ec87-4ff1-ad41-caddfb9e9d79)
+
 
 ## 🚀 How to Use
 
@@ -70,6 +82,7 @@ A modern, responsive blogging platform designed for writers who appreciate clean
    - Toggle between light and dark themes
    - Consistent design across all pages
    - Smooth transition animations
+![image](https://github.com/user-attachments/assets/0cf5a1e0-58c9-4589-90b1-4b88fe02f419)
 
 ## 🛠️ Technical Details
 
@@ -95,11 +108,15 @@ A modern, responsive blogging platform designed for writers who appreciate clean
   - Event handling
   - Async operations
   - State management
+  - Technologies Used
+![image](https://github.com/user-attachments/assets/6fa40eb2-ebf3-4d74-b2f7-ce499494d176)
+
 
 ### External Resources
 - Font Awesome 6.4.0 (Icons)
 - Google Fonts (Inter, Playfair Display)
 - Unsplash API (Placeholder images)
+![image](https://github.com/user-attachments/assets/cf690b91-51e7-4292-9f82-f76695a6c38a)
 
 ## 🔮 Future Enhancements
 
@@ -126,6 +143,8 @@ A modern, responsive blogging platform designed for writers who appreciate clean
    - Social sharing
    - Analytics dashboard
    - Email notifications
+![image](https://github.com/user-attachments/assets/a1940c8e-d340-4620-b04b-e9293f3e79ab)
+
 
 ## 🤝 Contributing
 
